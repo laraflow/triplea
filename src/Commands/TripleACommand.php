@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Laraflow\TripleA\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class TripleACommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'TripleA';
 
     public $description = 'My command';
 

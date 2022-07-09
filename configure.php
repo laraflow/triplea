@@ -118,11 +118,11 @@ function determineSeparator(string $path): string {
 }
 
 function replaceForWindows(): array {
-    return preg_split('/\\r\\n|\\r|\\n/', run('dir /S /B * | findstr /v /i .git\ | findstr /v /i vendor | findstr /v /i '.basename(__FILE__).' | findstr /r /i /M /F:/ ":author :vendor :package VendorName skeleton migration_table_name vendor_name vendor_slug author@domain.com"'));
+    return preg_split('/\\r\\n|\\r|\\n/', run('dir /S /B * | findstr /v /i .git\ | findstr /v /i vendor | findstr /v /i '.basename(__FILE__).' | findstr /r /i /M /F:/ ":author :vendor :package Laraflow TripleA migration_table_name vendor_name vendor_slug author@domain.com"'));
 }
 
 function replaceForAllOtherOSes(): array {
-    return explode(PHP_EOL, run('grep -E -r -l -i ":author|:vendor|:package|VendorName|skeleton|migration_table_name|vendor_name|vendor_slug|author@domain.com" --exclude-dir=vendor ./* ./.github/* | grep -v ' . basename(__FILE__)));
+    return explode(PHP_EOL, run('grep -E -r -l -i ":author|:vendor|:package|Laraflow|TripleA|migration_table_name|vendor_name|vendor_slug|author@domain.com" --exclude-dir=vendor ./* ./.github/* | grep -v ' . basename(__FILE__)));
 }
 
 $gitName = run('git config user.name');
@@ -136,10 +136,10 @@ $usernameGuess = dirname($usernameGuess);
 $usernameGuess = basename($usernameGuess);
 $authorUsername = ask('Author username', $usernameGuess);
 
-$vendorName = ask('Vendor name', $authorUsername);
-$vendorSlug = slugify($vendorName);
-$vendorNamespace = ucwords($vendorName);
-$vendorNamespace = ask('Vendor namespace', $vendorNamespace);
+$Laraflow = ask('Vendor name', $authorUsername);
+$vendorSlug = slugify($Laraflow);
+$Laraflowspace = ucwords($Laraflow);
+$Laraflowspace = ask('Vendor namespace', $Laraflowspace);
 
 $currentDirectory = getcwd();
 $folderName = basename($currentDirectory);
@@ -159,9 +159,9 @@ $useUpdateChangelogWorkflow = confirm('Use automatic changelog updater workflow?
 
 writeln('------');
 writeln("Author     : {$authorName} ({$authorUsername}, {$authorEmail})");
-writeln("Vendor     : {$vendorName} ({$vendorSlug})");
+writeln("Vendor     : {$Laraflow} ({$vendorSlug})");
 writeln("Package    : {$packageSlug} <{$description}>");
-writeln("Namespace  : {$vendorNamespace}\\{$className}");
+writeln("Namespace  : {$Laraflowspace}\\{$className}");
 writeln("Class name : {$className}");
 writeln("---");
 writeln("Packages & Utilities");
@@ -180,29 +180,29 @@ $files = (str_starts_with(strtoupper(PHP_OS), 'WIN') ? replaceForWindows() : rep
 
 foreach ($files as $file) {
     replace_in_file($file, [
-        ':author_name' => $authorName,
-        ':author_username' => $authorUsername,
+        'Mohammad Hafijul Islam' => $authorName,
+        'hafijul233' => $authorUsername,
         'author@domain.com' => $authorEmail,
-        ':vendor_name' => $vendorName,
-        ':vendor_slug' => $vendorSlug,
-        'VendorName' => $vendorNamespace,
+        ':vendor_name' => $Laraflow,
+        'laraflow' => $vendorSlug,
+        'Laraflow' => $Laraflowspace,
         ':package_name' => $packageName,
-        ':package_slug' => $packageSlug,
-        ':package_slug_without_prefix' => $packageSlugWithoutPrefix,
-        'Skeleton' => $className,
-        'skeleton' => $packageSlug,
+        'triplea' => $packageSlug,
+        'triplea_without_prefix' => $packageSlugWithoutPrefix,
+        'TripleA' => $className,
+        'TripleA' => $packageSlug,
         'migration_table_name' => title_snake($packageSlug),
         'variable' => $variableName,
         ':package_description' => $description,
     ]);
 
     match (true) {
-        str_contains($file, determineSeparator('src/Skeleton.php')) => rename($file, determineSeparator('./src/' . $className . '.php')),
-        str_contains($file, determineSeparator('src/SkeletonServiceProvider.php')) => rename($file, determineSeparator('./src/' . $className . 'ServiceProvider.php')),
-        str_contains($file, determineSeparator('src/Facades/Skeleton.php')) => rename($file, determineSeparator('./src/Facades/' . $className . '.php')),
-        str_contains($file, determineSeparator('src/Commands/SkeletonCommand.php')) => rename($file, determineSeparator('./src/Commands/' . $className . 'Command.php')),
-        str_contains($file, determineSeparator('database/migrations/create_skeleton_table.php.stub')) => rename($file, determineSeparator('./database/migrations/create_' . title_snake($packageSlugWithoutPrefix) . '_table.php.stub')),
-        str_contains($file, determineSeparator('config/skeleton.php')) => rename($file, determineSeparator('./config/' . $packageSlugWithoutPrefix . '.php')),
+        str_contains($file, determineSeparator('src/TripleA.php')) => rename($file, determineSeparator('./src/' . $className . '.php')),
+        str_contains($file, determineSeparator('src/TripleAServiceProvider.php')) => rename($file, determineSeparator('./src/' . $className . 'ServiceProvider.php')),
+        str_contains($file, determineSeparator('src/Facades/TripleA.php')) => rename($file, determineSeparator('./src/Facades/' . $className . '.php')),
+        str_contains($file, determineSeparator('src/Commands/TripleACommand.php')) => rename($file, determineSeparator('./src/Commands/' . $className . 'Command.php')),
+        str_contains($file, determineSeparator('database/migrations/create_TripleA_table.php.stub')) => rename($file, determineSeparator('./database/migrations/create_' . title_snake($packageSlugWithoutPrefix) . '_table.php.stub')),
+        str_contains($file, determineSeparator('config/TripleA.php')) => rename($file, determineSeparator('./config/' . $packageSlugWithoutPrefix . '.php')),
         str_contains($file, 'README.md') => remove_readme_paragraphs($file),
         default => [],
     };

@@ -1,5 +1,5 @@
 <?php
-// config for VendorName/Skeleton
+// config for Laraflow/TripleA
 return [
 
 ];
