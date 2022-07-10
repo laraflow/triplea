@@ -2,7 +2,7 @@
 
 namespace Laraflow\TripleA\Http\Controllers\Auth;;
 
-use Laraflow\TripleA\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Laraflow\TripleA\Http\Requests\Auth\NewPasswordRequest;
 use Laraflow\TripleA\Services\Auth\NewPasswordService;
 use Illuminate\Http\RedirectResponse;

@@ -2,7 +2,7 @@
 
 namespace Laraflow\TripleA\Http\Controllers\Auth;;
 
-use Laraflow\TripleA\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Laraflow\TripleA\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;

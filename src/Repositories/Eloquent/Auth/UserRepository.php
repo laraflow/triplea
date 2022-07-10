@@ -4,7 +4,7 @@
 namespace Laraflow\TripleA\Repositories\Eloquent\Backend\Setting;
 
 
-use Laraflow\TripleA\Abstracts\Repository\EloquentRepository;
+use Laraflow\Core\Abstracts\Repository\EloquentRepository;
 use Laraflow\TripleA\Models\Backend\Setting\User;
 use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 use Exception;
@@ -186,4 +186,8 @@ class UserRepository extends EloquentRepository
     }
 
 
+    public function filter(array $conditions = [])
+    {
+        // TODO: Implement filter() method.
+    }
 }

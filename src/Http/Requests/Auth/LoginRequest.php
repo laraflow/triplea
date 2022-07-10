@@ -2,10 +2,10 @@
 
 namespace Laraflow\TripleA\Http\Requests\Auth;
 
-use Laraflow\TripleA\Rules\PhoneNumber;
-use Laraflow\TripleA\Rules\Username;
-use Laraflow\TripleA\Supports\Constant;
+use Laraflow\Core\Rules\PhoneNumber;
+use Laraflow\Core\Supports\Constant;
 use Illuminate\Foundation\Http\FormRequest;
+use Laraflow\Core\Rules\Username;
 
 class LoginRequest extends FormRequest
 {

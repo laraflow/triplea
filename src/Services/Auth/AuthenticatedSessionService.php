@@ -4,7 +4,7 @@ namespace Laraflow\TripleA\Services\Auth;
 
 
 use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
-use Laraflow\TripleA\Supports\Constant;
+use Laraflow\Core\Supports\Constant;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
