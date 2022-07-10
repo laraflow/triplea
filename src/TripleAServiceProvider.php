@@ -2,9 +2,9 @@
 
 namespace Laraflow\TripleA;
 
+use Laraflow\TripleA\Commands\TripleACommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Laraflow\TripleA\Commands\TripleACommand;
 
 class TripleAServiceProvider extends PackageServiceProvider
 {
