@@ -2,12 +2,11 @@
 
 namespace Laraflow\TripleA\Services\Auth;
 
-
-use Laraflow\TripleA\Providers\RouteServiceProvider;
+use function __;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use function __;
+use Laraflow\TripleA\Providers\RouteServiceProvider;
 use function redirect;
 use function view;
 

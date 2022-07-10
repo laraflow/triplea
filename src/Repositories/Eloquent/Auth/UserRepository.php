@@ -1,17 +1,14 @@
 <?php
 
-
 namespace Laraflow\TripleA\Repositories\Eloquent\Backend\Setting;
 
-
-use Laraflow\Core\Abstracts\Repository\EloquentRepository;
-use Laraflow\TripleA\Models\Backend\Setting\User;
-use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-
+use Laraflow\Core\Abstracts\Repository\EloquentRepository;
+use Laraflow\TripleA\Models\Backend\Setting\User;
+use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 
 class UserRepository extends EloquentRepository
 {
@@ -42,7 +39,6 @@ class UserRepository extends EloquentRepository
         return $user->roles;
     }
 
-
     /**
      * @param array $roles
      * @param bool $detachOldRoles
@@ -50,7 +46,6 @@ class UserRepository extends EloquentRepository
      */
     public function manageRoles(array $roles = [], bool $detachOldRoles = false): bool
     {
-
         $alreadyAssignedRoles = [];
 
         $roleCollection = $this->getAssignedRoles();
@@ -94,7 +89,7 @@ class UserRepository extends EloquentRepository
     {
         $query = $this->getQueryBuilder();
 
-        if (isset($filters['search']) && !empty($filters['search'])) :
+        if (isset($filters['search']) && ! empty($filters['search'])) :
             $query->where('name', 'like', "%{$filters['search']}%")
                 ->orWhere('username', 'like', "%{$filters['search']}%")
                 ->orWhere('email', '=', "%{$filters['search']}%")
@@ -102,33 +97,32 @@ class UserRepository extends EloquentRepository
                 ->orWhere('enabled', '=', "%{$filters['search']}%");
         endif;
 
-        if (isset($filters['enabled']) && !empty($filters['enabled'])) :
+        if (isset($filters['enabled']) && ! empty($filters['enabled'])) :
             $query->where('enabled', '=', $filters['enabled']);
         endif;
 
-        if (isset($filters['parent_id']) && !empty($filters['parent_id'])) :
+        if (isset($filters['parent_id']) && ! empty($filters['parent_id'])) :
             $query->where('parent_id', '=', $filters['parent_id']);
         endif;
 
-        if (isset($filters['sort']) && !empty($filters['direction'])) :
+        if (isset($filters['sort']) && ! empty($filters['direction'])) :
             $query->orderBy($filters['sort'], $filters['direction']);
         endif;
 
         //Role may be int, string, array
-        if (isset($filters['role']) && !empty($filters['role'])) :
+        if (isset($filters['role']) && ! empty($filters['role'])) :
             $query->whereHas('roles', function ($subQuery) use ($filters) {
-
-                if (!is_array($filters['role'])):
+                if (! is_array($filters['role'])):
                     $filters['role'][] = $filters['role'];
                 endif;
 
                 $firstRole = array_shift($filters['role']);
                 $subQuery->where('id', '=', $firstRole);
 
-                if (!empty($filters['role'])) :
+                if (! empty($filters['role'])) :
                     foreach ($filters['role'] as $role):
                         $subQuery->orWhere('id', '=', $role);
-                    endforeach;
+                endforeach;
                 endif;
             });
         endif;
@@ -157,6 +151,7 @@ class UserRepository extends EloquentRepository
     public function paginateWith(array $filters = [], array $eagerRelations = [], bool $is_sortable = false): LengthAwarePaginator
     {
         $query = $this->getQueryBuilder();
+
         try {
             $query = $this->filterData($filters, $is_sortable);
         } catch (Exception $exception) {
@@ -176,6 +171,7 @@ class UserRepository extends EloquentRepository
     public function getWith(array $filters = [], array $eagerRelations = [], bool $is_sortable = false)
     {
         $query = $this->getQueryBuilder();
+
         try {
             $query = $this->filterData($filters, $is_sortable);
         } catch (Exception $exception) {
@@ -184,7 +180,6 @@ class UserRepository extends EloquentRepository
             return $query->with($eagerRelations)->get();
         }
     }
-
 
     public function filter(array $conditions = [])
     {

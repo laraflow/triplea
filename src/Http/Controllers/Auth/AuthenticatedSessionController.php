@@ -2,13 +2,13 @@
 
 namespace Laraflow\TripleA\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controller;
-use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
-use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
+use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
+use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 
 /**
  * @class AuthenticatedSessionController
@@ -53,10 +53,12 @@ class AuthenticatedSessionController extends Controller
         if ($confirm['status'] === true) {
             Session::put('locale', 'bd');
             notify($confirm['message'], $confirm['level'], $confirm['title']);
+
             return redirect()->route($confirm['landing_page']);
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
+
         return redirect()->back();
     }
 
@@ -71,10 +73,12 @@ class AuthenticatedSessionController extends Controller
         $confirm = $this->authenticatedSessionService->attemptLogout($request);
         if ($confirm['status'] === true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
+
             return redirect()->to(route('home'));
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
+
         return redirect()->back();
     }
 }

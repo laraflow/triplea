@@ -1,12 +1,14 @@
 <?php
 
-namespace Laraflow\TripleA\Http\Controllers\Auth;;
+namespace Laraflow\TripleA\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controller;
-use Laraflow\TripleA\Providers\RouteServiceProvider;
+;
+
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
+use Laraflow\TripleA\Providers\RouteServiceProvider;
 
 class VerifyEmailController extends Controller
 {
