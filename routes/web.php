@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Authentication Route
  */
-Route::name('auth.')->group(function () {
+Route::name('triplea.auth.')->group(function () {
 
     Route::get('/login', AuthenticatedSessionController::class)
         ->middleware('guest')
