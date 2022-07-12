@@ -14,14 +14,16 @@ use Illuminate\Support\Facades\Route;
  */
 Route::name('auth.')->group(function () {
 
-    Route::view('/privacy-terms', 'auth::terms')->name('terms');
-
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('/login', AuthenticatedSessionController::class)
         ->middleware('guest')
         ->name('login');
 
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    Route::post('/login', [AuthenticatedSessionController::class, 'login'])
         ->middleware('guest');
+
+    Route::match(['get', 'post'], '/logout', [AuthenticatedSessionController::class, 'logout'])
+        ->middleware('auth')
+        ->name('logout');
 
     if (Config::get('triplea.allow_register')):
         Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -68,8 +70,4 @@ Route::name('auth.')->group(function () {
 
     Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store'])
         ->middleware('auth');
-
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->middleware('auth')
-        ->name('logout');
 });

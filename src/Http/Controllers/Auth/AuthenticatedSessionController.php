@@ -2,13 +2,12 @@
 
 namespace Laraflow\TripleA\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controller;
-use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
-use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Routing\Controller;
+use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
+use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
 
 /**
  * @class AuthenticatedSessionController
@@ -34,9 +33,9 @@ class AuthenticatedSessionController extends Controller
      *
      * @return View
      */
-    public function create(): View
+    public function __invoke(): View
     {
-        return view('auth.login');
+        return view(config('triplea.auth.view.login'));
     }
 
     /**
@@ -45,13 +44,11 @@ class AuthenticatedSessionController extends Controller
      * @param LoginRequest $request
      * @return RedirectResponse
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function login(LoginRequest $request): RedirectResponse
     {
         $confirm = $this->authenticatedSessionService->attemptLogin($request);
 
-        \Log::info("Login Info Tapping", $confirm);
         if ($confirm['status'] === true) {
-            Session::put('locale', 'bd');
             notify($confirm['message'], $confirm['level'], $confirm['title']);
             return redirect()->route($confirm['landing_page']);
         }
@@ -66,7 +63,7 @@ class AuthenticatedSessionController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
         $confirm = $this->authenticatedSessionService->attemptLogout($request);
         if ($confirm['status'] === true) {
