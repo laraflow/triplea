@@ -1,18 +1,15 @@
 <?php
 
 
-namespace Laraflow\TripleA\Repositories\Eloquent\Backend\Setting;
-
+namespace Laraflow\TripleA\Repositories\Eloquent\Auth;
 
 use Laraflow\Core\Abstracts\Repository\EloquentRepository;
-use Laraflow\TripleA\Models\Backend\Setting\User;
 use Laraflow\TripleA\Services\Auth\AuthenticatedSessionService;
-use Exception;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
-
+/**
+ * Class UserRepository
+ * @package Laraflow\TripleA\Repositories\Eloquent\Auth
+ */
 class UserRepository extends EloquentRepository
 {
     /**
@@ -24,73 +21,13 @@ class UserRepository extends EloquentRepository
         /**
          * Set the model that will be used for repo
          */
-        $model = $model ?? new User();
+        $model = $model ?? config('triplea.auth.model');
 
         parent::__construct($model);
     }
 
-    /**
-     * @param User|null $user
-     * @return Collection
-     */
-    public function getAssignedRoles(User $user = null): ?Collection
-    {
-        if (is_null($user)) {
-            return $this->model->roles;
-        }
 
-        return $user->roles;
-    }
-
-
-    /**
-     * @param array $roles
-     * @param bool $detachOldRoles
-     * @return bool
-     */
-    public function manageRoles(array $roles = [], bool $detachOldRoles = false): bool
-    {
-
-        $alreadyAssignedRoles = [];
-
-        $roleCollection = $this->getAssignedRoles();
-
-        if ($roleCollection != null):
-            $alreadyAssignedRoles = $roleCollection->pluck('id')->toArray();
-        endif;
-
-        $roleIds = ($detachOldRoles) ? $roles : array_unique(array_merge($alreadyAssignedRoles, $roles));
-
-        return (bool)$this->model->roles()->sync($roleIds, ['model_type' => get_class($this->model)]);
-    }
-
-    /**
-     * @param string $roleName
-     * @return mixed
-     */
-    public function usersByRole(string $roleName)
-    {
-        return $this->model->role($roleName)->get();
-    }
-
-    /**
-     * @param string $testUserName
-     * @return bool
-     * @throws \Exception
-     */
-    public function verifyUniqueUsername(string $testUserName): bool
-    {
-        return ($this->findFirstWhere('username', '=', $testUserName) == null);
-    }
-
-    /**
-     * Search Function for Permissions
-     *
-     * @param array $filters
-     * @param bool $is_sortable
-     * @return Builder
-     */
-    private function filterData(array $filters = [], bool $is_sortable = false): Builder
+    public function filter(array $conditions = [])
     {
         $query = $this->getQueryBuilder();
 
@@ -133,61 +70,11 @@ class UserRepository extends EloquentRepository
             });
         endif;
 
-
-        if ($is_sortable == true) :
-            $query->sortable();
-        endif;
-
         if (AuthenticatedSessionService::isSuperAdmin()) :
             $query->withTrashed();
         endif;
 
 
         return $query;
-    }
-
-    /**
-     * Pagination Generator
-     * @param array $filters
-     * @param array $eagerRelations
-     * @param bool $is_sortable
-     * @return LengthAwarePaginator
-     * @throws Exception
-     */
-    public function paginateWith(array $filters = [], array $eagerRelations = [], bool $is_sortable = false): LengthAwarePaginator
-    {
-        $query = $this->getQueryBuilder();
-        try {
-            $query = $this->filterData($filters, $is_sortable);
-        } catch (Exception $exception) {
-            $this->handleException($exception);
-        } finally {
-            return $query->with($eagerRelations)->paginate($this->itemsPerPage);
-        }
-    }
-
-    /**
-     * @param array $filters
-     * @param array $eagerRelations
-     * @param bool $is_sortable
-     * @return Builder[]|\Illuminate\Database\Eloquent\Collection
-     * @throws Exception
-     */
-    public function getWith(array $filters = [], array $eagerRelations = [], bool $is_sortable = false)
-    {
-        $query = $this->getQueryBuilder();
-        try {
-            $query = $this->filterData($filters, $is_sortable);
-        } catch (Exception $exception) {
-            $this->handleException($exception);
-        } finally {
-            return $query->with($eagerRelations)->get();
-        }
-    }
-
-
-    public function filter(array $conditions = [])
-    {
-        // TODO: Implement filter() method.
     }
 }
