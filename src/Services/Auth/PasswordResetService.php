@@ -3,13 +3,12 @@
 namespace Laraflow\TripleA\Services\Auth;
 
 
-use Laraflow\TripleA\Models\Backend\Setting\User;
-use Laraflow\TripleA\Repositories\Eloquent\Backend\Setting\UserRepository;
-use Laraflow\TripleA\Supports\Constant;
-use Laraflow\TripleA\Supports\Utility;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Laraflow\Core\Supports\Constant;
+use Laraflow\TripleA\Repositories\Eloquent\Auth\UserRepository;
 
 class PasswordResetService
 {
@@ -51,7 +50,7 @@ class PasswordResetService
             $credentials,
             function ($user) use ($credentials) {
                 $confirmation = $this->userRepository->update([
-                    'password' => Utility::hashPassword($credentials['password']),
+                    'password' => Hash::make($credentials['password']),
                     'force_pass_reset' => 0,
                     'remember_token' => Str::random(60),
                 ], $user->id);
@@ -101,7 +100,7 @@ class PasswordResetService
     {
         $resetToken = null;
 
-        $status = Password::sendResetLink($credentials, function (User $user, string $token) use (&$resetToken) {
+        $status = Password::sendResetLink($credentials, function ($user, string $token) use (&$resetToken) {
             $resetToken = $token;
         });
 

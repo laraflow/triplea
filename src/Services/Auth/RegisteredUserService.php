@@ -2,13 +2,14 @@
 
 namespace Laraflow\TripleA\Services\Auth;
 
-use Laraflow\TripleA\Models\Setting\User;
-use Laraflow\TripleA\Repositories\Eloquent\Backend\Setting\UserRepository;
-use Laraflow\TripleA\Services\Backend\Common\FileUploadService;
-use Laraflow\TripleA\Supports\Constant;
-use Laraflow\TripleA\Supports\Utility;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Laraflow\Core\Services\Utilities\FileUploadService;
+use Laraflow\TripleA\Models\User;
+use Laraflow\TripleA\Repositories\Eloquent\Auth\UserRepository;
+use Laraflow\Core\Supports\Constant;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use function __;
@@ -30,7 +31,7 @@ class RegisteredUserService
      * @param UserRepository $userRepository
      * @param FileUploadService $fileUploadService
      */
-    public function __construct(UserRepository    $userRepository,
+    public function __construct(UserRepository $userRepository,
                                 FileUploadService $fileUploadService)
     {
         $this->userRepository = $userRepository;
@@ -44,7 +45,7 @@ class RegisteredUserService
      */
     public function attemptRegistration(array $registerFormInputs): ?array
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         //format request object
         $inputs = $this->formatRegistrationInfo($registerFormInputs);
         try {
@@ -52,7 +53,7 @@ class RegisteredUserService
             $newUser = $this->userRepository->create($inputs);
             if ($newUser instanceof User) {
                 if ($this->attachAvatarImage($newUser) && $this->attachDefaultRoles($newUser)) {
-                    \DB::commit();
+                    DB::commit();
                     $newUser->refresh();
 
                     Auth::login($newUser);
@@ -80,7 +81,7 @@ class RegisteredUserService
         //Hash password
         return [
             'name' => $request['name'],
-            'password' => Utility::hashPassword(($request['password'] ?? Constant::PASSWORD)),
+            'password' => Hash::make(($request['password'] ?? Constant::PASSWORD)),
             'username' => ($request['username'] ?? Utility::generateUsername($request['name'])),
             'mobile' => ($request['mobile'] ?? null),
             'email' => ($request['email'] ?? null),
@@ -91,13 +92,11 @@ class RegisteredUserService
 
 
     /**
-     * @param User $user
+     * @param $user
      * @return bool
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      * @throws Exception
      */
-    protected function attachAvatarImage(User $user): bool
+    protected function attachAvatarImage( $user): bool
     {
         //add profile image
         $profileImagePath = $this->fileUploadService->createAvatarImageFromText($user->name);
@@ -106,7 +105,7 @@ class RegisteredUserService
     }
 
     /**
-     * @param User $user
+     * @param $user
      * @return bool
      */
     protected function attachDefaultRoles(User $user): bool
