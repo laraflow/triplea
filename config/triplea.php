@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'model' => '',
+        'model' => 'App\Models\User',
         /*
          *---------------------------------------------------------------------
          * Prefix  on Admin Login Route
