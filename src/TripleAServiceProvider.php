@@ -2,24 +2,51 @@
 
 namespace Laraflow\TripleA;
 
-use Laraflow\TripleA\Commands\TripleACommand;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class TripleAServiceProvider extends PackageServiceProvider
+class TripleAServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+
+    public function boot()
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
-        $package
-            ->name('TripleA')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_TripleA_table')
-            ->hasCommand(TripleACommand::class);
+
+        //config
+        $this->publishes([
+            __DIR__ . '/../config/triplea.php' => config_path('triplea.php'),
+        ], 'triplea-config');
+
+        //route
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
+        //migration
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        //translation
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'triplea');
+
+        $this->publishes([
+            __DIR__ . '/../resources/lang' => $this->app->langPath('vendor/triplea/lang'),
+        ], 'triplea-lang');
+
+        //view
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'triplea');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/triplea'),
+        ], 'triplea-view');
+
+        //asset
+        $this->publishes([
+            __DIR__ . '/../public' => public_path('vendor/triplea'),
+        ], 'triplea-asset');
     }
+
+    public function register()
+    {
+        //config
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/triplea.php', 'triplea'
+        );
+    }
+
 }

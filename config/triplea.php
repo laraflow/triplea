@@ -104,14 +104,14 @@ return [
          * @var string []
          */
         'view' => [
-            'login' => '',
-            'login' => '',
-            'login' => '',
-            'login' => '',
-            'login' => '',
-
+            'login' => 'triplea::auth.login',
+            'register' => 'triplea::auth.register',
+            'forgot-password' => 'triplea::auth.forgot-password',
+            'reset-password' => 'triplea::auth.reset-password',
+            'verify-email' => 'triplea::auth.verify-email',
+            'confirm-password' => 'triplea::auth.confirm-password',
+            'lock-screen' => 'triplea::auth.lock-screen',
         ],
-
 
     ],
     'rbac' => [
