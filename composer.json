@@ -20,7 +20,8 @@
         "ext-pdo": "*",
         "hafijul233/form": "^0.0.9",
         "illuminate/contracts": "^8.83",
-        "laraflow/core": "dev-main"
+        "laraflow/core": "dev-main",
+        "owen-it/laravel-auditing": "^13.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
