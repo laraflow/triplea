@@ -1,12 +1,14 @@
 <?php
 
-namespace Laraflow\TripleA\Http\Controllers\Auth;;
+namespace Laraflow\TripleA\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controller;
-use Laraflow\TripleA\Providers\RouteServiceProvider;
+;
+
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Laraflow\TripleA\Providers\RouteServiceProvider;
 
 class ConfirmablePasswordController extends Controller
 {

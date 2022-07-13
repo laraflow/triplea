@@ -1,13 +1,15 @@
 <?php
 
-namespace Laraflow\TripleA\Http\Controllers\Auth;;
+namespace Laraflow\TripleA\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controller;
-use Laraflow\TripleA\Http\Requests\Auth\NewPasswordRequest;
-use Laraflow\TripleA\Services\Auth\NewPasswordService;
+;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\View\View;
+use Laraflow\TripleA\Http\Requests\Auth\NewPasswordRequest;
+use Laraflow\TripleA\Services\Auth\NewPasswordService;
 
 class NewPasswordController extends Controller
 {
@@ -23,6 +25,7 @@ class NewPasswordController extends Controller
     {
         $this->newPasswordService = $newPasswordService;
     }
+
     /**
      * Display the password reset view.
      *
@@ -31,7 +34,6 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-
     }
 
     /**
@@ -43,6 +45,5 @@ class NewPasswordController extends Controller
      */
     public function store(NewPasswordRequest $request)
     {
-
     }
 }

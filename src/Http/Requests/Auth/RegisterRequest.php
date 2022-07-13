@@ -2,10 +2,10 @@
 
 namespace Laraflow\TripleA\Http\Requests\Auth;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Laraflow\Core\Rules\PhoneNumber;
 use Laraflow\Core\Rules\Username;
 use Laraflow\Core\Supports\Constant;
-use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
@@ -26,10 +26,9 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-
         $rules = [
             'name' => 'required|string|min:3|max:255',
-            'agree_terms' => 'required|string'
+            'agree_terms' => 'required|string',
         ];
 
         //Credential Field
@@ -37,14 +36,12 @@ class RegisterRequest extends FormRequest
             || (config('auth.credential_field') == Constant::LOGIN_OTP
                 && config('auth.credential_otp_field') == Constant::OTP_EMAIL)) {
             $rules['email'] = 'required|min:10|max:255|string|email:rfc,dns';
-
         } elseif (config('auth.credential_field') == Constant::LOGIN_MOBILE
             || (config('auth.credential_field') == Constant::LOGIN_OTP
                 && config('auth.credential_otp_field') == Constant::OTP_MOBILE)) {
-            $rules['mobile'] = ['required', 'string', 'min:11', 'max:11', new PhoneNumber];
-
+            $rules['mobile'] = ['required', 'string', 'min:11', 'max:11', new PhoneNumber()];
         } elseif (config('auth.credential_field') == Constant::LOGIN_USERNAME) {
-            $rules['username'] = ['required', new Username, 'min:5', 'max:255', 'string'];
+            $rules['username'] = ['required', new Username(), 'min:5', 'max:255', 'string'];
         }
 
         //Password Field
@@ -53,6 +50,5 @@ class RegisterRequest extends FormRequest
         }
 
         return $rules;
-
     }
 }

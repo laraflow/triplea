@@ -2,12 +2,12 @@
 
 namespace Laraflow\TripleA\Http\Controllers\Auth;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 use Laraflow\TripleA\Http\Requests\Auth\NewPasswordRequest;
 use Laraflow\TripleA\Http\Requests\Auth\PasswordResetRequest;
 use Laraflow\TripleA\Services\Auth\PasswordResetService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class PasswordResetController extends Controller
 {
@@ -48,12 +48,13 @@ class PasswordResetController extends Controller
 
         if ($confirm['status'] === true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
+
             return redirect()->to(route('auth.password.reset', $confirm['token']));
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
-        return redirect()->back();
 
+        return redirect()->back();
     }
 
     public function edit($token)
@@ -69,10 +70,12 @@ class PasswordResetController extends Controller
 
         if ($confirm['status'] === true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
+
             return redirect()->to(route('auth.login'));
         }
 
         notify($confirm['message'], $confirm['level'], $confirm['title']);
+
         return redirect()->back();
     }
 }

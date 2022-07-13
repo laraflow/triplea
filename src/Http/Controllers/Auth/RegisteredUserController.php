@@ -1,15 +1,16 @@
 <?php
 
-namespace Laraflow\TripleA\Http\Controllers\Auth;;
+namespace Laraflow\TripleA\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controller;
-use Laraflow\TripleA\Http\Requests\Auth\RegisterRequest;
-use Laraflow\TripleA\Services\Auth\RegisteredUserService;
+;
+
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-
+use Illuminate\Routing\Controller;
+use Laraflow\TripleA\Http\Requests\Auth\RegisterRequest;
+use Laraflow\TripleA\Services\Auth\RegisteredUserService;
 
 class RegisteredUserController extends Controller
 {
@@ -51,9 +52,11 @@ class RegisteredUserController extends Controller
 
         if ($confirm['status'] == true) {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
+
             return redirect()->route(config('backend.config.home_url', 'admin.'));
         } else {
             notify($confirm['message'], $confirm['level'], $confirm['title']);
+
             return redirect()->back();
         }
     }
