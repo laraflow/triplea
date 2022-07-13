@@ -80,3 +80,14 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Environments
+
+|      Package      |       Key        |     Values   | Default |
+|-------------------|------------------|--------------|---------|
+| **Laravel Audit** | AUDITING_ENABLED |(true, false) |   true  |
+|   **Laratrust**   | LARATRUST_ENABLE_CACHE |(true, false) |   true  |
+| **Laravel Audit** | AUDITING_ENABLED |(true, false) |   true  |
+| **Laravel Audit** | AUDITING_ENABLED |(true, false) |   true  |
+| **Laravel Audit** | AUDITING_ENABLED |(true, false) |   true  |
+| **Laravel Audit** | AUDITING_ENABLED |(true, false) |   true  |
