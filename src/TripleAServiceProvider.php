@@ -13,6 +13,9 @@ class TripleAServiceProvider extends ServiceProvider
         //config
         $this->publishes([
             __DIR__ . '/../config/triplea.php' => config_path('triplea.php'),
+            __DIR__ . '/../config/audit.php' => config_path('audit.php'),
+            __DIR__ . '/../config/auth.php' => config_path('auth.php'),
+            __DIR__ . '/../config/laratrust.php' => config_path('laratrust.php')
         ], 'triplea-config');
 
         //route

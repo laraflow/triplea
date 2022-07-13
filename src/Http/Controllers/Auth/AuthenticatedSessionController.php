@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function __invoke(): View
     {
-        return view(config('triplea.auth.view.login'));
+        return view(config('triplea.view.login'));
     }
 
     /**

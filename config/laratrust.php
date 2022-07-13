@@ -46,7 +46,7 @@ return [
         | NOTE: Currently the database check does not use cache.
         |
         */
-        'enabled' => env('LARATRUST_ENABLE_CACHE', (bool)(env('APP_ENV') === 'production')),
+        'enabled' => env('LARATRUST_ENABLE_CACHE', env('APP_ENV') === 'production'),
 
         /*
         |--------------------------------------------------------------------------
@@ -73,7 +73,7 @@ return [
     |
     */
     'user_models' => [
-        'users' => \App\Models\User::class,
+        'users' => \Laraflow\TripleA\Models\User::class,
     ],
 
     /*
@@ -88,14 +88,14 @@ return [
     */
     'models' => [
 
-        'role' => \App\Models\Role::class,
+        'role' => \Laraflow\TripleA\Models\Role::class,
 
-        'permission' => \App\Models\Permission::class,
+        'permission' => \Laraflow\TripleA\Models\Permission::class,
 
         /**
          * Will be used only if the teams functionality is enabled.
          */
-        'team' => \App\Models\Team::class,
+        'team' => \Laraflow\TripleA\Models\Team::class,
     ],
 
     /*
@@ -213,7 +213,7 @@ return [
         | Please check the docs to see what you need to do in case you have the package already configured.
         |
         */
-        'enabled' => false,
+        'enabled' => true,
 
         /*
         |--------------------------------------------------------------------------
