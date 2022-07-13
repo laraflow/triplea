@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class TripleAServiceProvider extends ServiceProvider
 {
-
     public function boot()
     {
 
@@ -15,7 +14,7 @@ class TripleAServiceProvider extends ServiceProvider
             __DIR__ . '/../config/triplea.php' => config_path('triplea.php'),
             __DIR__ . '/../config/audit.php' => config_path('audit.php'),
             __DIR__ . '/../config/auth.php' => config_path('auth.php'),
-            __DIR__ . '/../config/laratrust.php' => config_path('laratrust.php')
+            __DIR__ . '/../config/laratrust.php' => config_path('laratrust.php'),
         ], 'triplea-config');
 
         //route
@@ -48,8 +47,8 @@ class TripleAServiceProvider extends ServiceProvider
     {
         //config
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/triplea.php', 'triplea'
+            __DIR__ . '/../config/triplea.php',
+            'triplea'
         );
     }
-
 }

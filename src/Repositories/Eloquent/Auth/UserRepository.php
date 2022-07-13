@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Laraflow\TripleA\Repositories\Eloquent\Auth;
 
 use Laraflow\Core\Abstracts\Repository\EloquentRepository;
@@ -26,12 +25,11 @@ class UserRepository extends EloquentRepository
         parent::__construct($model);
     }
 
-
     public function filter(array $conditions = [])
     {
         $query = $this->getQueryBuilder();
 
-        if (isset($filters['search']) && !empty($filters['search'])) :
+        if (isset($filters['search']) && ! empty($filters['search'])) :
             $query->where('name', 'like', "%{$filters['search']}%")
                 ->orWhere('username', 'like', "%{$filters['search']}%")
                 ->orWhere('email', '=', "%{$filters['search']}%")
@@ -39,33 +37,32 @@ class UserRepository extends EloquentRepository
                 ->orWhere('enabled', '=', "%{$filters['search']}%");
         endif;
 
-        if (isset($filters['enabled']) && !empty($filters['enabled'])) :
+        if (isset($filters['enabled']) && ! empty($filters['enabled'])) :
             $query->where('enabled', '=', $filters['enabled']);
         endif;
 
-        if (isset($filters['parent_id']) && !empty($filters['parent_id'])) :
+        if (isset($filters['parent_id']) && ! empty($filters['parent_id'])) :
             $query->where('parent_id', '=', $filters['parent_id']);
         endif;
 
-        if (isset($filters['sort']) && !empty($filters['direction'])) :
+        if (isset($filters['sort']) && ! empty($filters['direction'])) :
             $query->orderBy($filters['sort'], $filters['direction']);
         endif;
 
         //Role may be int, string, array
-        if (isset($filters['role']) && !empty($filters['role'])) :
+        if (isset($filters['role']) && ! empty($filters['role'])) :
             $query->whereHas('roles', function ($subQuery) use ($filters) {
-
-                if (!is_array($filters['role'])):
+                if (! is_array($filters['role'])):
                     $filters['role'][] = $filters['role'];
                 endif;
 
                 $firstRole = array_shift($filters['role']);
                 $subQuery->where('id', '=', $firstRole);
 
-                if (!empty($filters['role'])) :
+                if (! empty($filters['role'])) :
                     foreach ($filters['role'] as $role):
                         $subQuery->orWhere('id', '=', $role);
-                    endforeach;
+                endforeach;
                 endif;
             });
         endif;

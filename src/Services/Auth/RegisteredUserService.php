@@ -2,17 +2,15 @@
 
 namespace Laraflow\TripleA\Services\Auth;
 
+use function __;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laraflow\Core\Services\Utilities\FileUploadService;
+use Laraflow\Core\Supports\Constant;
 use Laraflow\TripleA\Models\User;
 use Laraflow\TripleA\Repositories\Eloquent\Auth\UserRepository;
-use Laraflow\Core\Supports\Constant;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use function __;
 
 class RegisteredUserService
 {
@@ -31,8 +29,10 @@ class RegisteredUserService
      * @param UserRepository $userRepository
      * @param FileUploadService $fileUploadService
      */
-    public function __construct(UserRepository $userRepository,
-                                FileUploadService $fileUploadService)
+    public function __construct(
+        UserRepository $userRepository,
+        FileUploadService $fileUploadService
+    )
     {
         $this->userRepository = $userRepository;
         $this->fileUploadService = $fileUploadService;
@@ -48,6 +48,7 @@ class RegisteredUserService
         DB::beginTransaction();
         //format request object
         $inputs = $this->formatRegistrationInfo($registerFormInputs);
+
         try {
             //create new user
             $newUser = $this->userRepository->create($inputs);
@@ -67,6 +68,7 @@ class RegisteredUserService
             }
         } catch (\Exception $exception) {
             $this->userRepository->handleException($exception);
+
             return ['status' => false, 'message' => __($exception->getMessage()), 'level' => Constant::MSG_TOASTR_ERROR, 'title' => 'Error!'];
         }
     }
@@ -86,21 +88,21 @@ class RegisteredUserService
             'mobile' => ($request['mobile'] ?? null),
             'email' => ($request['email'] ?? null),
             'remarks' => 'self-registered',
-            'enabled' => Constant::ENABLED_OPTION
+            'enabled' => Constant::ENABLED_OPTION,
         ];
     }
-
 
     /**
      * @param $user
      * @return bool
      * @throws Exception
      */
-    protected function attachAvatarImage( $user): bool
+    protected function attachAvatarImage($user): bool
     {
         //add profile image
         $profileImagePath = $this->fileUploadService->createAvatarImageFromText($user->name);
         $user->addMedia($profileImagePath)->toMediaCollection('avatars');
+
         return $user->save();
     }
 
@@ -111,6 +113,7 @@ class RegisteredUserService
     protected function attachDefaultRoles(User $user): bool
     {
         $this->userRepository->setModel($user);
+
         return $this->userRepository->manageRoles([Constant::GUEST_ROLE_ID]);
     }
 }
