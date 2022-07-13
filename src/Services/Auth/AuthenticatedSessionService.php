@@ -3,13 +3,10 @@
 namespace Laraflow\TripleA\Services\Auth;
 
 
-use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
-use Laraflow\Core\Supports\Constant;
-use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
+use Laraflow\Core\Supports\Constant;
+use Laraflow\TripleA\Http\Requests\Auth\LoginRequest;
 
 /**
  * Class AuthenticatedSessionService
@@ -34,28 +31,12 @@ class AuthenticatedSessionService
     /**
      * Handle an incoming auth request.
      *
-     * @param LoginRequest $request
+     * @param array $request
      * @return array
      */
-    public function attemptLogin(LoginRequest $request): array
+    public function attemptLogin(array $request): array
     {
-        $authConfirmation = $this->ensureIsNotRateLimited($request);
-
-        if ($authConfirmation['status'] == true) {
-            //Count Overflow Request hit
-            RateLimiter::hit($this->throttleKey($request));
-
-            $authConfirmation = $this->authenticate($request);
-
-            if ($authConfirmation['status'] == true) {
-                //Reset Rate Limiter
-                RateLimiter::clear($this->throttleKey($request));
-                //start Auth session
-                $request->session()->regenerate();
-            }
-        }
-
-        return $authConfirmation;
+        return $this->authenticate($request);
     }
 
     /**
@@ -143,7 +124,6 @@ class AuthenticatedSessionService
         return false;
     }
 
-
     /**
      * if user has to reset password forced
      *
@@ -161,25 +141,21 @@ class AuthenticatedSessionService
     /**
      * Attempt to authenticate the request's credentials.
      *
-     * @param LoginRequest $request
+     * @param array $request
      * @return array
-     *
      */
-    private function authenticate(LoginRequest $request): array
+    private function authenticate(array $request): array
     {
         //Format config based request value
         $authInfo = $this->formatAuthCredential($request);
 
-        $remember_me = false;
+        $remember_me = $request['remember'] ?? false;
 
         $confirmation = ['status' => false,
             'message' => __('auth.login.failed'),
             'level' => Constant::MSG_TOASTR_ERROR,
             'title' => 'Alert!'];
 
-        if (config('auth.allow_remembering')) {
-            $remember_me = $request->boolean('remember');
-        }
 
         //authentication is OTP
         $confirmation = (!isset($authInfo['password']))
@@ -254,66 +230,32 @@ class AuthenticatedSessionService
     }
 
     /**
-     * Ensure the login request is not rate limited.
-     *
-     * @param LoginRequest $request
-     * @return array
-     *
-     */
-    private function ensureIsNotRateLimited(LoginRequest $request): array
-    {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey($request), 5)) {
-            return ['status' => true, 'message' => __('auth.throttle'), 'level' => Constant::MSG_TOASTR_WARNING, 'title' => 'Warning'];
-        }
-
-        event(new Lockout($request));
-
-        $seconds = RateLimiter::availableIn($this->throttleKey($request));
-
-        return ['status' => false, 'message' => __('auth.throttle', [
-            'seconds' => $seconds,
-            'minutes' => ceil($seconds / 60),
-        ]), 'level' => Constant::MSG_TOASTR_WARNING, 'title' => 'Warning'];
-    }
-
-    /**
-     * Get the rate limiting throttle key for the request.
-     *
-     * @param LoginRequest $request
-     * @return string
-     */
-    private function throttleKey(LoginRequest $request): string
-    {
-        return Str::lower($request->input('email')) . '|' . $request->ip();
-    }
-
-    /**
      * Collect Credential Info from Request based on Config
      *
-     * @param LoginRequest $request
+     * @param array $request
      * @return array
      */
-    private function formatAuthCredential(LoginRequest $request): array
+    private function formatAuthCredential(array $request): array
     {
         $credentials = [];
 
         if (config('auth.credential_field') == Constant::LOGIN_EMAIL
             || (config('auth.credential_field') == Constant::LOGIN_OTP
                 && config('auth.credential_otp_field') == Constant::OTP_EMAIL)) {
-            $credentials['email'] = $request->email;
+            $credentials['email'] = $request['email'] ?? null;
 
         } elseif (config('auth.credential_field') == Constant::LOGIN_MOBILE
             || (config('auth.credential_field') == Constant::LOGIN_OTP
                 && config('auth.credential_otp_field') == Constant::OTP_MOBILE)) {
-            $credentials['mobile'] = $request->mobile;
+            $credentials['mobile'] = $request['mobile'] ?? null;
 
         } elseif (config('auth.credential_field') == Constant::LOGIN_USERNAME) {
-            $credentials['username'] = $request->username;
+            $credentials['username'] = $request['username'] ?? null;
         }
 
         //Password Field
         if (config('auth.credential_field') != Constant::LOGIN_OTP) {
-            $credentials['password'] = $request->password;
+            $credentials['password'] = $request['password'] ?? null;
         }
 
         return $credentials;

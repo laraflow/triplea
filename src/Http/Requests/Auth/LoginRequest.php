@@ -2,10 +2,10 @@
 
 namespace Laraflow\TripleA\Http\Requests\Auth;
 
-use Laraflow\Core\Rules\PhoneNumber;
-use Laraflow\Core\Supports\Constant;
 use Illuminate\Foundation\Http\FormRequest;
+use Laraflow\Core\Rules\PhoneNumber;
 use Laraflow\Core\Rules\Username;
+use Laraflow\Core\Supports\Constant;
 
 class LoginRequest extends FormRequest
 {
@@ -37,7 +37,7 @@ class LoginRequest extends FormRequest
         } elseif (config('auth.credential_field') == Constant::LOGIN_MOBILE
             || (config('auth.credential_field') == Constant::LOGIN_OTP
                 && config('auth.credential_otp_field') == Constant::OTP_MOBILE)) {
-            $rules['mobile'] = ['required','string','min:11','max:11', new PhoneNumber];
+            $rules['mobile'] = ['required', 'string', 'min:11', 'max:11', new PhoneNumber];
 
         } elseif (config('auth.credential_field') == Constant::LOGIN_USERNAME) {
             $rules['username'] = ['required', new Username, 'min:5', 'max:255', 'string'];
@@ -51,4 +51,12 @@ class LoginRequest extends FormRequest
         return $rules;
     }
 
+    protected function prepareForValidation()
+    {
+        if (config('auth.allow_remembering')) {
+            $this->merge([
+                'remember' => $this->boolean('remember', false)
+            ]);
+        }
+    }
 }

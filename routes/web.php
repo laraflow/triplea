@@ -15,7 +15,7 @@ use Laraflow\TripleA\Http\Controllers\Auth\VerifyEmailController;
  */
 Route::name('triplea.auth.')
     ->middleware('web')
-    ->prefix(Config::get('triplea.auth.prefix'))
+    ->prefix(Config::get('auth.prefix'))
     ->group(function () {
 
         Route::get('/login', AuthenticatedSessionController::class)
@@ -29,16 +29,16 @@ Route::name('triplea.auth.')
             ->middleware('auth')
             ->name('logout');
 
-        if (Config::get('triplea.allow_register')):
-            Route::get('/register', [RegisteredUserController::class, 'create'])
+        if (Config::get('auth.allow_register')):
+            Route::get('/register', RegisteredUserController::class)
                 ->middleware('guest')
                 ->name('register');
 
-            Route::post('/register', [RegisteredUserController::class, 'store'])
+            Route::post('/register', [RegisteredUserController::class, 'register'])
                 ->middleware('guest');
         endif;
 
-        if (Config::get('triplea.allow_password_reset')):
+        if (Config::get('auth.allow_password_reset')):
             Route::get('/forgot-password', [PasswordResetController::class, 'create'])
                 ->middleware('guest')
                 ->name('password.request');

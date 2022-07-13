@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function create()
+    public function __invoke()
     {
         return view('auth.register');
     }
@@ -44,9 +44,9 @@ class RegisteredUserController extends Controller
      * @return RedirectResponse
      * @throws \Throwable
      */
-    public function store(RegisterRequest $request): RedirectResponse
+    public function register(RegisterRequest $request): RedirectResponse
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
         $confirm = $this->registeredUserService->attemptRegistration($inputs);
 
         if ($confirm['status'] == true) {

@@ -46,9 +46,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function login(LoginRequest $request): RedirectResponse
     {
-        $confirm = $this->authenticatedSessionService->attemptLogin($request);
+        $inputs = $request->validated();
+
+        $confirm = $this->authenticatedSessionService->attemptLogin($inputs);
 
         if ($confirm['status'] === true) {
+            //start Auth session
+            $request->session()->regenerate();
+
+            //session popup
             notify($confirm['message'], $confirm['level'], $confirm['title']);
             return redirect()->route($confirm['landing_page']);
         }
