@@ -4,6 +4,7 @@ namespace Laraflow\TripleA\Services\Auth;
 
 use Illuminate\Http\Request;
 use Laraflow\TripleA\Providers\RouteServiceProvider;
+
 use function redirect;
 use function view;
 

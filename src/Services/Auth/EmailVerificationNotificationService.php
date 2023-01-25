@@ -3,8 +3,10 @@
 namespace Laraflow\TripleA\Services\Auth;
 
 use function back;
+
 use Illuminate\Http\Request;
 use Laraflow\TripleA\Providers\RouteServiceProvider;
+
 use function redirect;
 
 class EmailVerificationNotificationService

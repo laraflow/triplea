@@ -3,10 +3,12 @@
 namespace Laraflow\TripleA\Services\Auth;
 
 use function __;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Laraflow\TripleA\Providers\RouteServiceProvider;
+
 use function redirect;
 use function view;
 

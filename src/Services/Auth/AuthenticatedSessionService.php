@@ -157,10 +157,8 @@ class AuthenticatedSessionService
             : $this->credentialBasedLogin($authInfo, $remember_me);
 
         if ($confirmation['status'] === true) {
-
             //is user is banned to log in
             if (! self::isUserEnabled()) {
-
                 //logout from all guard
                 Auth::logout();
                 $confirmation = ['status' => false,

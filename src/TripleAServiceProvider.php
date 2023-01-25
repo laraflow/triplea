@@ -8,7 +8,6 @@ class TripleAServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-
         //config
         $this->publishes([
             __DIR__ . '/../config/triplea.php' => config_path('triplea.php'),

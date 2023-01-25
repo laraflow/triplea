@@ -3,9 +3,11 @@
 namespace Laraflow\TripleA\Services\Auth;
 
 use function event;
+
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Laraflow\TripleA\Providers\RouteServiceProvider;
+
 use function redirect;
 
 class VerifyEmailService

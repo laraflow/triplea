@@ -62,7 +62,7 @@ class UserRepository extends EloquentRepository
                 if (! empty($filters['role'])) :
                     foreach ($filters['role'] as $role):
                         $subQuery->orWhere('id', '=', $role);
-                endforeach;
+                    endforeach;
                 endif;
             });
         endif;

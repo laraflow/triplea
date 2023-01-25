@@ -3,6 +3,7 @@
 namespace Laraflow\TripleA\Services\Auth;
 
 use function __;
+
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,8 +33,7 @@ class RegisteredUserService
     public function __construct(
         UserRepository $userRepository,
         FileUploadService $fileUploadService
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->fileUploadService = $fileUploadService;
     }
